@@ -1,0 +1,380 @@
+/* colors
+background blue  #3437eb
+POW Orange :  #d46e08
+text dark gray : #121212
+*/
+
+
+/*  */
+
+
+/* Fonts:
+font-family: 'Anton', sans-serif;
+font-family: 'Bangers', sans-serif;
+font-family: 'Shadows Into Light', cursive; */
+
+html {}
+
+body {
+    height: 100%;
+    width: 100%;
+    /* text-align: center; */
+    background: linear-gradient(90deg, #0093E9 0%, #80D0C7 100%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+#themeToggler {
+    padding: 10px;
+    margin: 10px;
+}
+
+
+/* //THEMES */
+
+.themeCodeButton {
+    background-color: #2e2e2e;
+    color: white;
+    margin-top: 30px;
+    padding: 6px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    border: 1px solid white;
+    text-align: center;
+}
+
+.themeActionButton {
+    color: black;
+    background-color: #0d374d;
+    margin-top: 30px;
+    padding: 6px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    border: 1px solid white;
+    text-align: center;
+}
+
+
+/* Code */
+
+.codeBody {
+    background: linear-gradient(90deg, rgba(15, 14, 14, 1) 0%, rgba(47, 48, 50, 1) 35%, rgba(11, 11, 11, 1) 100%);
+}
+
+.codeContainer {
+    border: 2px solid white;
+    background-color: #2e2e2e
+}
+
+.codeImage {
+    width: 30vmax;
+    min-width: 150px;
+    max-width: 500px;
+    margin-bottom: 0
+}
+
+.codeHeading {
+    color: white;
+}
+
+.codeButtons {
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+}
+
+.codeToDo {
+    color: white;
+}
+
+.codeFont {
+    font-family: 'Quicksand', sans-serif;
+}
+
+
+/* Action! */
+
+.actionBody {
+    background: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+}
+
+.actionContainer {
+    border: 2px solid black;
+    background-color: #0d374d;
+}
+
+.actionImage {
+    width: 30vmax;
+    min-width: 150px;
+    max-width: 500px;
+    margin-bottom: 0
+}
+
+.actionTitle {
+    color: white;
+    text-shadow: 0 0 5px black
+}
+
+.actionButtons {
+    background-color: #d46e08;
+    color: black;
+    border: 1px solid white;
+}
+
+.actionToDo {
+    color: #e38605;
+    text-shadow: 1px 1px 2px black;
+}
+
+.anton {
+    font-family: 'Anton', sans-serif;
+    letter-spacing: 3px;
+    color: white;
+    text-shadow: 1px 1px 1px black;
+}
+
+
+/* Vapor */
+
+#vaporBody {
+    background: linear-gradient(90deg, rgba(15, 14, 14, 1) 0%, rgba(47, 48, 50, 1) 35%, rgba(11, 11, 11, 1) 100%);
+}
+
+#vaporContainer {
+    background-color: #2e2e2e
+}
+
+#vaporHeading {
+    color: white;
+}
+
+#vaporButtons {
+    background-color: black;
+    color: white;
+}
+
+#vaporToDo {}
+
+
+/* Zen */
+
+#zenBody {
+    background: linear-gradient(90deg, rgba(15, 14, 14, 1) 0%, rgba(47, 48, 50, 1) 35%, rgba(11, 11, 11, 1) 100%);
+}
+
+#zenContainer {
+    background-color: #2e2e2e
+}
+
+#zenHeading {
+    color: white;
+}
+
+#zenButtons {
+    background-color: black;
+    color: white;
+}
+
+#zenToDo {}
+
+h1 {
+    /* margin-top: 0; */
+}
+
+#title-div {
+    padding: 15px;
+    text-align: center;
+    width: 90vw;
+    margin: auto;
+}
+
+
+/* #action{
+  width: 30vmax;
+  min-width: 150px;
+  max-width: 500px;
+margin-bottom: 0
+} */
+
+.title {
+    color: white;
+    text-shadow: 0 0 5px black
+}
+
+#title {
+    font-size: 1.9rem;
+    margin-top: 10px;
+    margin-bottom: 40px;
+    font-style: italic;
+}
+
+@media(max-width:900px) {
+    #title {
+        font-size: 1.5rem;
+    }
+}
+
+#action {
+    width: 30vmax;
+    min-width: 150px;
+    max-width: 500px;
+    margin-bottom: 0
+}
+
+.container {
+    color: #fff;
+    letter-spacing: 2px;
+    font-weight: lighter;
+    text-shadow: 1px 1px 1px black;
+    width: 80vw;
+    text-align: center;
+    margin: auto;
+    padding: 10px;
+    font-family: 'Shadows Into Light', sans-serif;
+    border: 2px solid black;
+    /* background-color: #0d374d; */
+    p
+    /* background-image: linear-gradient( 135deg, #97ABFF 1%, #123597 100%); */
+    box-shadow: 1px 1px 3px black;
+}
+
+.no-top-margin {
+    margin-top: 0;
+}
+
+
+/* completed list houses the completed items. It will be styled as having padding at the top to separate
+it visually from the mian list, and will be indented */
+
+.input-container {
+    width: 50vw;
+    margin: auto;
+}
+
+#inputField {
+    width: 32vw;
+    min-width: 150px;
+    height: 50px;
+    border: 1px solid black;
+    font-size: 1.2rem;
+    vertical-align: middle;
+    font-family: 'Anton', sans-serif;
+}
+
+#addToDo {
+    width: 6vw;
+    max-width: 50px;
+    min-width: 35px;
+    max-height: 40px;
+    min-height: 35px;
+    height: 50px;
+    padding: 5px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    border: 1px solid white;
+    text-align: center;
+    border-radius: 20%;
+}
+
+.addToDo {
+    background-color: #e38605;
+    color: black;
+}
+
+@media(max-width:283px) {
+    #addToDo {
+        margin-top: 5px;
+    }
+}
+
+.to-dos {
+    margin-top: 40px;
+    border-top: 1px solid white;
+}
+
+.checkbox {
+    width: 1vw;
+    max-width: 30px;
+    min-width: 20px;
+    max-height: 30px;
+    min-height: 20px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+
+/* checked-off checks the button with the black br */
+
+.checked-off {
+    background-color: black;
+    margin-left: 20px;
+}
+
+
+/* crosses and grays out text */
+
+.completed-task {
+    color: gray;
+    text-decoration: line-through;
+}
+
+
+/* Here, delete-btn appears only when hovering over the paragraph element, which always has class paragrtaph styling whether completed or not */
+
+.inviso {
+    display: none
+}
+
+.delete-btn {
+    text-align: center;
+    font-weight: bold;
+    background-color: #c4142e;
+    color: #fff;
+    width: 1vw;
+    max-width: 25px;
+    min-width: 18px;
+    max-height: 25px;
+    min-height: 18px;
+    border-radius: 50%;
+    margin-right: 15px;
+    margin-left: 15px;
+    padding: 3px;
+    opacity: 70%;
+    border: 1px solid white;
+}
+
+.delete-btn:hover {
+    opacity: 100%;
+    text-shadow: 0 0 3px white;
+}
+
+.paragraph-styling {
+    margin: 0;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-align: left;
+    /* text-shadow: 1px 1px 1px black; */
+}
+
+.paragraph-styling:hover+.delete {}
+
+#complete-list {
+    padding-top: 25px;
+    padding-left: 15px;
+}
+
+#wipe-button {
+    margin-top: 30px;
+    padding: 6px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    border: 1px solid white;
+    text-align: center;
+    /* border-radius: 20%; */
+}
+
+.wipe-button {
+    background-color: #e38605;
+    color: black;
+}
