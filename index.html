@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="To-Do List Javascript" content="To Do List Productivity Javascript app" />
+    <title>To-Do List</title>
+
+    <!-- font awesome cdn -->
+    <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous"> -->
+
+    <link href="style.css" rel="stylesheet" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bangers&family=Shadows+Into+Light&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body class="actionBody">
+
+    <div id="title-div">
+        <img id="action" class="#" src="images/action.png" />
+        <p id="title" class="anton actionTitle">
+            Executive Function Assistant
+        </p>
+    </div>
+
+
+    <div class="container actionContainer">
+        <div id="incomplete-list">
+
+
+            <h1 class="anton actionToDo no-top-margin">To Do:</h1>
+            <input id="inputField" type="text"> <button id="addToDo" class="actionButtons">+</button>
+            <div id="toDoContainer" class="to-dos">
+
+            </div>
+        </div>
+        <div id="complete-list">
+
+        </div>
+        <button id="wipe-button" class="actionButtons anton">Clear All</button>
+
+    </div>
+
+
+    <!-- Completed Tasks -->
+
+
+
+    <script src="index.js"></script>
+</body>
+
+</html>
