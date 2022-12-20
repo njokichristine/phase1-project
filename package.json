@@ -1,0 +1,19 @@
+{
+  "name": "phase1-project",
+  "version": "1.0.0",
+  "description": "To-do list to add, delete, and mark complete/incomplete. List stores all changes in localStorage, and list can be resetat any time with clear all button",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/njokichristine/phase1-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/njokichristine/phase1-project/issues"
+  },
+  "homepage": "https://github.com/njokichristine/phase1-project#readme"
+}

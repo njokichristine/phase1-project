@@ -9,9 +9,14 @@
 
     // let itemArrayJson=JSON.stringify(itemArray) //remember to redefine in function.
     //an array of OBJECTS that we will need to stringify before setting to localStroage, and parse() when getting from local storage
-    let assignId; //increment with every addItem() to use for each new item's data Object, with keys for complete/incomplete, task string, and ID.
+    let assignId;
+    
+    
+    //increment with every addItem() to use for each new item's data Object, with keys for complete/incomplete, task string, and ID.
     //assignId must be STORED or else they'll duplicate starting from 0 every session.
     //Next is class constructor
+
+    
     function item(task, id, complete) {
         this.task = task;
         this.id = id;
