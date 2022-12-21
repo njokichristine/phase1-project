@@ -1,380 +1,240 @@
-/* colors
-background blue  #3437eb
-POW Orange :  #d46e08
-text dark gray : #121212
-*/
-
-
-/*  */
-
-
-/* Fonts:
-font-family: 'Anton', sans-serif;
-font-family: 'Bangers', sans-serif;
-font-family: 'Shadows Into Light', cursive; */
-
-html {}
-
+@charset "UTF-8";
 body {
-    height: 100%;
+    background: #936d6d;
+    padding: 80px 0 0 0;
+}
+
+body,
+input,
+button {
+    font-family: 'Roboto', sans-serif;
+}
+
+.noFill {
+    fill: none;
+}
+
+header {
     width: 100%;
-    /* text-align: center; */
-    background: linear-gradient(90deg, #0093E9 0%, #80D0C7 100%);
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-}
-
-#themeToggler {
-    padding: 10px;
-    margin: 10px;
-}
-
-
-/* //THEMES */
-
-.themeCodeButton {
-    background-color: #2e2e2e;
-    color: white;
-    margin-top: 30px;
-    padding: 6px;
-    font-size: 1.4rem;
-    font-weight: 600;
-    border: 1px solid white;
-    text-align: center;
-}
-
-.themeActionButton {
-    color: black;
-    background-color: #0d374d;
-    margin-top: 30px;
-    padding: 6px;
-    font-size: 1.4rem;
-    font-weight: 600;
-    border: 1px solid white;
-    text-align: center;
-}
-
-
-/* Code */
-
-.codeBody {
-    background: linear-gradient(90deg, rgba(15, 14, 14, 1) 0%, rgba(47, 48, 50, 1) 35%, rgba(11, 11, 11, 1) 100%);
-}
-
-.codeContainer {
-    border: 2px solid white;
-    background-color: #2e2e2e
-}
-
-.codeImage {
-    width: 30vmax;
-    min-width: 150px;
-    max-width: 500px;
-    margin-bottom: 0
-}
-
-.codeHeading {
-    color: white;
-}
-
-.codeButtons {
-    background-color: black;
-    color: white;
-    border: 1px solid white;
-}
-
-.codeToDo {
-    color: white;
-}
-
-.codeFont {
-    font-family: 'Quicksand', sans-serif;
-}
-
-
-/* Action! */
-
-.actionBody {
-    background: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
-}
-
-.actionContainer {
-    border: 2px solid black;
-    background-color: #0d374d;
-}
-
-.actionImage {
-    width: 30vmax;
-    min-width: 150px;
-    max-width: 500px;
-    margin-bottom: 0
-}
-
-.actionTitle {
-    color: white;
-    text-shadow: 0 0 5px black
-}
-
-.actionButtons {
-    background-color: #d46e08;
-    color: black;
-    border: 1px solid white;
-}
-
-.actionToDo {
-    color: #e38605;
-    text-shadow: 1px 1px 2px black;
-}
-
-.anton {
-    font-family: 'Anton', sans-serif;
-    letter-spacing: 3px;
-    color: white;
-    text-shadow: 1px 1px 1px black;
-}
-
-
-/* Vapor */
-
-#vaporBody {
-    background: linear-gradient(90deg, rgba(15, 14, 14, 1) 0%, rgba(47, 48, 50, 1) 35%, rgba(11, 11, 11, 1) 100%);
-}
-
-#vaporContainer {
-    background-color: #2e2e2e
-}
-
-#vaporHeading {
-    color: white;
-}
-
-#vaporButtons {
-    background-color: black;
-    color: white;
-}
-
-#vaporToDo {}
-
-
-/* Zen */
-
-#zenBody {
-    background: linear-gradient(90deg, rgba(15, 14, 14, 1) 0%, rgba(47, 48, 50, 1) 35%, rgba(11, 11, 11, 1) 100%);
-}
-
-#zenContainer {
-    background-color: #2e2e2e
-}
-
-#zenHeading {
-    color: white;
-}
-
-#zenButtons {
-    background-color: black;
-    color: white;
-}
-
-#zenToDo {}
-
-h1 {
-    /* margin-top: 0; */
-}
-
-#title-div {
+    height: 80px;
+    position: fixed;
     padding: 15px;
-    text-align: center;
-    width: 90vw;
-    margin: auto;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    background: #602d2d;
+    box-shadow: 0px 2px 4px rgba(44, 62, 80, 0.15);
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 
-
-/* #action{
-  width: 30vmax;
-  min-width: 150px;
-  max-width: 500px;
-margin-bottom: 0
-} */
-
-.title {
-    color: white;
-    text-shadow: 0 0 5px black
+header input {
+    width: 100%;
+    height: 50px;
+    float: left;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 400;
+    text-indent: 18px;
+    padding: 0 60px 0 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px 25px 25px 5px;
+    border: 0px;
+    box-shadow: none;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
 }
 
-#title {
-    font-size: 1.9rem;
-    margin-top: 10px;
-    margin-bottom: 40px;
-    font-style: italic;
+header input::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, 0.75);
 }
 
-@media(max-width:900px) {
-    #title {
-        font-size: 1.5rem;
-    }
+header input:-moz-input-placeholder {
+    color: rgba(255, 255, 255, 0.75);
 }
 
-#action {
-    width: 30vmax;
-    min-width: 150px;
-    max-width: 500px;
-    margin-bottom: 0
+header input::-moz-input-placeholder {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+header input:-ms-input-placeholder {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+header button {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 2;
+    border-radius: 25px;
+    background: #fff;
+    border: 0px;
+    box-shadow: none;
+    outline: none;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+header button svg {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -8px 0 0 -8px;
+}
+
+header button svg .fill {
+    fill: #936d6d;
 }
 
 .container {
-    color: #fff;
-    letter-spacing: 2px;
-    font-weight: lighter;
-    text-shadow: 1px 1px 1px black;
-    width: 80vw;
-    text-align: center;
-    margin: auto;
-    padding: 10px;
-    font-family: 'Shadows Into Light', sans-serif;
-    border: 2px solid black;
-    /* background-color: #0d374d; */
-    p
-    /* background-image: linear-gradient( 135deg, #97ABFF 1%, #123597 100%); */
-    box-shadow: 1px 1px 3px black:
+    width: 100%;
+    float: left;
+    padding: 15px;
 }
 
-.no-top-margin {
-    margin-top: 0;
+ul.todo {
+    width: 100%;
+    float: left;
 }
 
-
-/* completed list houses the completed items. It will be styled as having padding at the top to separate
-it visually from the mian list, and will be indented */
-
-.input-container {
-    width: 50vw;
-    margin: auto;
+ul.todo li {
+    width: 100%;
+    min-height: 50px;
+    float: left;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444;
+    line-height: 22px;
+    background: #fff;
+    border-radius: 5px;
+    position: relative;
+    box-shadow: 0px 1px 2px rgba(44, 62, 80, 0.10);
+    margin: 0 0 10px 0;
+    padding: 14px 100px 14px 14px;
+    word-break: break-word;
 }
 
-#inputField {
-    width: 32vw;
-    min-width: 150px;
-    height: 50px;
-    border: 1px solid black;
-    font-size: 1.2rem;
-    vertical-align: middle;
-    font-family: 'Anton', sans-serif;
-}
-
-#addToDo {
-    width: 6vw;
-    max-width: 50px;
-    min-width: 35px;
-    max-height: 40px;
-    min-height: 35px;
-    height: 50px;
-    padding: 5px;
-    font-size: 1.4rem;
-    font-weight: 600;
-    border: 1px solid white;
-    text-align: center;
-    border-radius: 20%;
-}
-
-.addToDo {
-    background-color: #e38605;
-    color: black;
-}
-
-@media(max-width:283px) {
-    #addToDo {
-        margin-top: 5px;
-    }
-}
-
-.to-dos {
-    margin-top: 40px;
-    border-top: 1px solid white;
-}
-
-.checkbox {
-    width: 1vw;
-    max-width: 30px;
-    min-width: 20px;
-    max-height: 30px;
-    min-height: 20px;
-    border-radius: 50%;
-    margin-right: 5px;
-}
-
-
-/* checked-off checks the button with the black br */
-
-.checked-off {
-    background-color: black;
-    margin-left: 20px;
-}
-
-
-/* crosses and grays out text */
-
-.completed-task {
-    color: gray;
-    text-decoration: line-through;
-}
-
-
-/* Here, delete-btn appears only when hovering over the paragraph element, which always has class paragrtaph styling whether completed or not */
-
-.inviso {
-    display: none
-}
-
-.delete-btn {
-    text-align: center;
-    font-weight: bold;
-    background-color: #c4142e;
-    color: #fff;
-    width: 1vw;
-    max-width: 25px;
-    min-width: 18px;
-    max-height: 25px;
-    min-height: 18px;
-    border-radius: 50%;
-    margin-right: 15px;
-    margin-left: 15px;
-    padding: 3px;
-    opacity: 70%;
-    border: 1px solid white;
-}
-
-.delete-btn:hover {
-    opacity: 100%;
-    text-shadow: 0 0 3px white;
-}
-
-.paragraph-styling {
+ul.todo li:last-of-type {
     margin: 0;
+}
+
+ul.todo li .buttons {
+    width: 100px;
+    height: 50px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+ul.todo li .buttons button {
+    width: 50px;
+    height: 50px;
+    float: left;
+    background: none;
+    position: relative;
+    border: 0px;
+    box-shadow: none;
+    outline: none;
     cursor: pointer;
-    font-weight: bold;
-    font-size: 1.2rem;
-    text-align: left;
-    /* text-shadow: 1px 1px 1px black; */
+    -webkit-appearance: none;
+    -moz-appearance: none;
 }
 
-.paragraph-styling:hover+.delete {}
-
-#complete-list {
-    padding-top: 25px;
-    padding-left: 15px;
+ul.todo li .buttons button:last-of-type:before {
+    content: '';
+    width: 1px;
+    height: 30px;
+    background: #770000;
+    position: absolute;
+    top: 10px;
+    left: 0;
 }
 
-#wipe-button {
-    margin-top: 30px;
-    padding: 6px;
-    font-size: 1.4rem;
-    font-weight: 600;
-    border: 1px solid white;
+ul.todo li .buttons button svg {
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -11px 0 0 -11px;
+}
+
+ul.todo li .buttons button.complete svg {
+    border-radius: 11px;
+    border: 1.5px solid #602d2d;
+    transition: background 0.2s ease;
+}
+
+ul.todo#completed li .buttons button.complete svg {
+    background: #602d2d;
+    border: 0px;
+}
+
+ul.todo:not(#completed) li .buttons button.complete:hover svg {
+    background: #602d2d;
+    /*rgba(37, 185, 154, 0.75);*/
+}
+
+ul.todo:not(#completed) li .buttons button.complete: svg .fill {
+    fill: #fff;
+}
+
+ul.todo#completed li .buttons button.complete svg .fill {
+    fill: #fff;
+}
+
+ul.todo li .buttons button svg .fill {
+    transition: fill 0.2s ease;
+}
+
+ul.todo li .buttons button.remove svg .fill {
+    fill: #c0cecb;
+}
+
+ul.todo li .buttons button.remove:hover svg .fill {
+    fill: #602d2d;
+}
+
+ul.todo li .buttons button.complete svg .fill {
+    fill: #602d2d;
+}
+
+ul.todo#completed {
+    position: relative;
+    padding: 60px 0 0 0;
+}
+
+ul.todo#completed:before {
+    content: '';
+    width: 150px;
+    height: 1px;
+    background: #602d2d;
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    margin: 0 0 0 -75px;
+}
+
+ul.todo#todo:empty:after {
+    content: 'You have nothing on your to-do list!';
+    margin: 15px 0 0 0;
+}
+
+ul.todo#completed:empty:after {
+    content: 'No completed task yet on your to-do list.';
+}
+
+ul.todo#todo:after,
+ul.todo#completed:after {
+    width: 100%;
+    display: block;
     text-align: center;
-    /* border-radius: 20%; */
-}
-
-.wipe-button {
-    background-color: #e38605;
-    color: black;
+    font-size: 12px;
+    color: #602d2d;
 }
