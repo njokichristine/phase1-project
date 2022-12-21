@@ -60,4 +60,7 @@ npm install --save-dev eslint@7.x eslint-config-airbnb-base@14.x eslint-plugin-i
 
 👤 christine njoki
 
+#github link
+https://github.com/njokichristine/phase1-project
+
 
