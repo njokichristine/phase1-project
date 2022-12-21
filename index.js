@@ -1,329 +1,123 @@
-(document).ready(function() {
-    let addToDoButton = document.getElementById("addToDo");
-    let wipeDataBtn = document.getElementById("wipe-button")
-    let toDoContainer = document.getElementById("toDoContainer");
-    let inputField = document.getElementById('inputField');
-    let completedList = document.getElementById('completed-list');
-    let itemArray;
-    let currentTheme;
 
-    // let itemArrayJson=JSON.stringify(itemArray) //remember to redefine in function.
-    //an array of OBJECTS that we will need to stringify before setting to localStroage, and parse() when getting from local storage
-    let assignId;
-    
-    
-    //increment with every addItem() to use for each new item's data Object, with keys for complete/incomplete, task string, and ID.
-    //assignId must be STORED or else they'll duplicate starting from 0 every session.
-    //Next is class constructor
-
-    
-    function item(task, id, complete) {
-        this.task = task;
-        this.id = id;
-        this.complete = complete
-    }
-    if (localStorage.getItem('storage') && localStorage.getItem('storage') != "placeholder") { //Potential error here: When we parse, if it's NOT in array form, it's invalid.
-        itemArray = JSON.parse(localStorage.getItem('storage')) //reclaim itemArray progress from prev session.
-        assignId = localStorage.getItem("idMaster") //continuity of ID number sequence across sessions.
-        for (i = 0; i < itemArray.length; i++) { //run render once per item rendered, NOT once, with a wrapped loop inside render().
-            render(itemArray)
-        }
-    } else {
-        itemArray = [] //can't define above, because it will cause errors if there IS local storage value, bc we'd push an array into an array. Not what we want.
-        assignId = 0 //if no data, we start IDs from 0
-        localStorage.setItem('storage', "placeholder") //If there is local storage do nothing.
-    } //If there isn't localStorage data yet, then we need to DECLARE it here so that when we reference it to redefine below, it exists.
-
-
-    function addItem() {
-        if (inputField.value.length > 0) {
-            console.log(inputField.value.length)
-            console.log($(".container").length)
-                //Save to localStorage via initemArray
-            var currentItem = new item(inputField.value, assignId, false) //false needs to toggle when checked off
-            itemArray.push(currentItem)
-            itemArrayJson = JSON.stringify(itemArray)
-                // itemArrayJson = itemArrayJson.substring(1, itemArrayJson.length-1) //cuts off the brackets, so that we aren't pushing an array, but just the objects.
-                //Overwriting the value of the 'storage' key.
-            localStorage.setItem('storage', itemArrayJson) //repeat this below on whe itemArray is updated, because otherwise changes won't carry over
-
-            var deleteButton = document.createElement("button")
-            deleteButton.classList.add("delete-btn")
-            deleteButton.classList.add("inviso")
-            deleteButton.textContent = "X"
-            deleteButton.addEventListener("click", function() {
-                    if (localStorage.getItem('storage') && localStorage.getItem('storage') != "placeholder") {
-                        itemArray = JSON.parse(localStorage.getItem('storage')) //GET Current data
-                    }
-                    itemArray.forEach(function(obj, ind) {
-                            if (obj.task + "X" == event.target.parentElement.innerText) {
-                                itemArray.splice(ind, 1)
-                                var tempArray = JSON.stringify(itemArray)
-                                localStorage.setItem('storage', tempArray) //and SET modified local storage array.
-
-                            }
-                        })
-                        //Now we just visually delete the htmo element
-
-                    event.target.parentElement.remove();
-                })
-                //Create paragraph element to hold text and buttons as parent
-            var paragraph = document.createElement("p")
-            paragraph.innerText = inputField.value
-            paragraph.classList.add("paragraph-styling")
-            paragraph.addEventListener("mouseover", function() {
-                deleteButton.classList.remove("inviso")
-
-            })
-            paragraph.addEventListener("mouseleave", function() {
-                deleteButton.classList.add("inviso")
-            })
-            inputField.value = "" //clear input field after add
-
-            //create checkbox to toggle complete/incomplete
-            var checkbox = document.createElement("button") //create checkbox-style button
-
-            checkbox.classList.add("checkbox") //add checkbox class for style
-            checkbox.addEventListener("click", function() { //HERE we're using event delegation to add event listener if/else to handle clicks BEFORE adding checkbox to DOM
-                if ($(event.target).hasClass("checked-off") == false) { //if you use a jquery method like hasClass, need to use jQuery selector style with $()
-                    //First edit renders
-                    paragraph.classList.add("completed-task") //CHECKS entire item, btnPlusText
-                    event.target.classList.add("checked-off") //"fills" checkbox with black background
-
-                    //Second edit itemArray object value so it stores that information and renders accurately on next session
-
-                    document.getElementById("complete-list").appendChild(paragraph)
-                } else {
-                    //First, edit renders
-                    paragraph.classList.remove("completed-task") //CHECKS entire item, btnPlusText
-                    event.target.classList.remove("checked-off") //"fills" checkbox with black background
-
-                    //Second, Edit object value in itemArray
-
-                    document.getElementById("incomplete-list").appendChild(paragraph)
-                }
-                toggleComplete(paragraph, checkbox)
-            })
-            toDoContainer.appendChild(paragraph)
-            paragraph.insertAdjacentElement("afterbegin", checkbox) //adds checkbox to DOM next to paragraph list item on left as FIRST CHILD. Note this is done AFTER its event listner is set.
-            paragraph.insertAdjacentElement("beforeend", deleteButton) //adds deleteButton to DOM next to paragraph list item on right as LAST CHILD. Note this is done AFTER its event listner is set.
-        }
-        assignId++ //increments the ID so that no 2 items have the same ID. This makes upkeep of localStorage array better..
-        localStorage.setItem("idMaster", assignId) //in conditional above, IF data, we set this as the stored value. If not, assignId = 0.
-
-        //The Next function is attaching event listeners to each CHECKBOX button. the comparison for whether the clicked button's parent <p> innertext == the obj.task is so that we can compare that obj.task to the text
-        let allCheckboxes = document.querySelectorAll(".checkbox") //when we find the match, THEN we if/else according to whether it should assign complete: true or false. This scope should accurately assess, bc we put the tests UNDER the forEach, not the inverse.
-        allCheckboxes.forEach(function(button) { //each button has this called individually every time an item is added.
-                button.addEventListener("click", function() { //on click of this instance of button in foreach...
-                    itemArray.forEach(function(obj) { //NOW we call another forEach, which will compare this particular button text value, with every itemArray obj.task
-                        if (obj.task + "X" == event.target.parentElement.innerText) { //if obj.task == THIS PARTICULAR button's innerText(plus 'X' for the X text in the delete btn)
-                            if ($(event.target).hasClass("checked-off")) { //and IF checked-off, we toggle to false, for incomplete
-                                obj.complete = true
-                            } else {
-                                obj.complete = false //ELSE, we toggle to true, for complete..THIS works. The IF doesn't...
-                            }
-                        }
-                        itemArrayJson = JSON.stringify(itemArray)
-
-                        localStorage.setItem('storage', itemArrayJson) //repeating update per item changed.
-                    })
-
-                })
-            }) //END allCheckbox function
-
-    }
-    // NEW SESSIONS-Render Items Onscreen (WITH Event Delegation) from localStorage objects carried over
-    // Only called if localStorage has storage value
-    function render(array) { //IS ITEMARRAY GETTING THE RIGHT VALUES? We should try pulling our conditionals for initial load from localStorage, NOT itemArray.
-        //HERE! I think itemArray is out of scope. It's defined within an if statement, I'm not sure if it's accurate. Pull from localStorage
-        var taskValue = array[i].task //these Are pulling corrctly.............
-        var completionValue = array[i].complete
-        var paragraph = document.createElement("p")
-
-        paragraph.innerText = taskValue;
-        paragraph.classList.add("paragraph-styling")
-        paragraph.addEventListener("mouseover", function() {
-            deleteButton.classList.remove("inviso")
-
-        })
-        paragraph.addEventListener("mouseleave", function() {
-            deleteButton.classList.add("inviso")
-        })
-        inputField.value = "" //clear input field after add
-
-        //create deleteButton with .delete class to target with :hover psuedo selector.
-        var deleteButton = document.createElement("button")
-        deleteButton.classList.add("delete-btn")
-        deleteButton.classList.add("inviso")
-        deleteButton.textContent = "X"
-        deleteButton.addEventListener("click", function() {
-            event.target.parentElement.remove();
-        })
-
-
-        //create checkbox to toggle complete/incomplete
-        var checkbox = document.createElement("button") //create checkbox-style button
-
-        checkbox.classList.add("checkbox") //add checkbox class for style
-        checkbox.addEventListener("click", function() { //HERE we're using EVENT DELEGATION to add event listener if/else to handle clicks BEFORE adding checkbox to DOM
-
-            if (completionValue == false) {
-                completionValue = true // need to change actual value, not just rendered elemnts
-                checkbox.parentElement.classList.add("completed-task") //CHECKS entire item, btnPlusText.. in render() this doesn't reset so i remains 4, meaning
-                event.target.classList.add("checked-off") //"fills" checkbox with black background
-                document.getElementById("complete-list").appendChild(paragraph)
-
-            } else {
-                completionValue = false; //if its true, then it must toggle to false on click.
-                checkbox.parentElement.classList.remove("completed-task") //This is always targeting the last item.
-                event.target.classList.remove("checked-off") //This targets correctly.
-                document.getElementById("incomplete-list").appendChild(paragraph)
-            }
-
-        })
-        if (completionValue == true) { //this handles the rendering on initial load, not on click.
-            paragraph.classList.add("completed-task") //CHECKS entire item, btnPlusText.. in render() this doesn't reset so i remains 4, meaning
-            checkbox.classList.add("checked-off") //"fills" checkbox with black background
-            document.getElementById("complete-list").appendChild(paragraph)
-        } else {
-            document.getElementById("incomplete-list").appendChild(paragraph)
-        }
-        paragraph.insertAdjacentElement("afterbegin", checkbox) //adds checkbox to DOM next to paragraph list item on left as FIRST CHILD. Note this is done AFTER its event listner is set.
-        paragraph.insertAdjacentElement("beforeend", deleteButton) //adds deleteButton to DOM next to paragraph list item on right as LAST CHILD. Note this is done AFTER its event listner is set.
-
-        //The Next function is attaching event listeners to each checkbox button. the comparison for whether the clicked button's parent <p> innertext == the obj.task is so that we can compare that obj.task to the text
-        let allCheckboxes = document.querySelectorAll(".checkbox") //when we find the match, THEN we if/else according to whether it should assign complete: true or false. This scope should accurately assess, bc we put the tests UNDER the forEach, not the inverse.
-        itemArray = JSON.parse(localStorage.getItem('storage'))
-        allCheckboxes.forEach(function(button) { //each button has this called individually every time an item is added.
-                button.addEventListener("click", function() { //on click of this instance of button in foreach...
-                    itemArray.forEach(function(obj) { //NOW we call another forEach, which will compare this particular button text value, with every itemArray obj.task
-                        if (obj.task + "X" == event.target.parentElement.innerText) { //if obj.task == THIS PARTICULAR button's innerText(plus 'X' for the X text in the delete btn)
-                            if ($(event.target).hasClass("checked-off")) { //and IF checked-off, we toggle to false, for incomplete
-                                obj.complete = true
-                            } else {
-                                obj.complete = false //ELSE, we toggle to true, for complete..THIS works. The IF doesn't...
-                            }
-                        }
-                        itemArrayJson = JSON.stringify(itemArray)
-
-                        localStorage.setItem('storage', itemArrayJson) //repeating update per item changed.
-                    })
-
-                })
-            }) //END allCheckbox function
-
-        //DELETION attach event listeners to all rendered buttons for Local Storage Update for deletion of items.
-        document.querySelectorAll(".delete-btn").forEach(function(btn) {
-
-            btn.addEventListener("click", function() {
-
-                itemArray = JSON.parse(localStorage.getItem('storage')) //GET Current data
-                itemArray.forEach(function(obj, ind) {
-                    if (obj.task + "X" == event.target.parentElement.innerText) {
-
-                        itemArray.splice(ind, 1)
-                        var tempArray = JSON.stringify(itemArray)
-                        localStorage.setItem('storage', tempArray) //and SET modified local storage array.
-                    }
-                })
-            })
-
-        })
-
-    } //END Render
-
-    //Named Function to toggle completion value in storage.complete key
-    function toggleComplete(p, checkbox) { //adjust itemArray object boolean value for
-        itemArray.forEach(function(obj) {
-                if (obj.task == p.textContent && $(checkbox).hasClass("checked-off")) {
-                    obj.complete == true;
-                }
-            }) //key: complete: T/F
-            //occurs on every CHECKBOX CLICK EVENT.
-
-    }
-
-    function themeCode() {
-        document.querySelector("img").removeAttribute("src")
-        document.querySelector("img").setAttribute("src", "images/code.png")
-        document.querySelector("body").classList.remove("actionBody")
-        document.querySelector("body").classList.add("codeBody")
-        document.querySelector("html").classList.remove("actionBody")
-        document.querySelector("html").classList.add("codeBody")
-        document.querySelector(".container").classList.remove("actionContainer")
-        document.querySelector(".container").classList.add("codeContainer")
-        document.querySelector("#title").classList.remove("actionTitle")
-        document.querySelector("#title").classList.add("codeHeading")
-        document.querySelector("h1").classList.remove("actionToDo")
-        document.querySelector("h1").classList.add("codeToDo")
-
-        document.querySelector("#wipe-button").classList.remove("actionButtons")
-        document.querySelector("#wipe-button").classList.add("codeButtons")
-        document.querySelector("#addToDo").classList.remove("actionButtons")
-        document.querySelector("#addToDo").classList.add("codeButtons")
-        document.querySelectorAll(".anton").forEach(function(n) { n.classList.add("codeFont") })
-        document.querySelectorAll(".codeFont").forEach(function(n) { n.classList.remove("anton") })
-        currentTheme = "dark"
-        localStorage.setItem("theme", currentTheme)
-    }
-
-    function themeAction() {
-        document.querySelector("img").removeAttribute("src")
-        document.querySelector("img").setAttribute("src", "images/action.png")
-        document.querySelector("body").classList.add("actionBody")
-        document.querySelector("body").classList.remove("codeBody")
-        document.querySelector("html").classList.add("actionBody")
-        document.querySelector("html").classList.remove("codeBody")
-        document.querySelector(".container").classList.add("actionContainer")
-        document.querySelector(".container").classList.remove("codeContainer")
-        document.querySelector("#title").classList.add("title")
-        document.querySelector("#title").classList.remove("codeHeading")
-        document.querySelector("h1").classList.add("actionToDo")
-        document.querySelector("h1").classList.remove("codeToDo")
-        document.querySelector("#wipe-button").classList.add("actionButtons")
-        document.querySelector("#wipe-button").classList.remove("codeButtons")
-        document.querySelector("#addToDo").classList.add("actionButtons")
-        document.querySelector("#addToDo").classList.remove("codeButtons")
-        document.querySelector("#themeToggler").classList.remove("themeCodeButton")
-        document.querySelector("#themeToggler").classList.add("themeActionButton")
-        document.querySelectorAll(".codeFont").forEach(function(n) { n.classList.add("anton") })
-        document.querySelectorAll(".anton").forEach(function(n) { n.classList.remove("codeFont") })
+var data = (localStorage.getItem('todoList')) ? JSON.parse(localStorage.getItem('todoList')):{
+  todo: [],
+  completed: []
+};
 
 
 
-        //Now, Store This Preference
-        currentTheme = "action"
-        localStorage.setItem("theme", currentTheme)
-    }
+var removeSVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 22 22" style="enable-background:new 0 0 22 22;" xml:space="preserve"><rect class="noFill" width="22" height="22"/><g><g><path class="fill" d="M16.1,3.6h-1.9V3.3c0-1.3-1-2.3-2.3-2.3h-1.7C8.9,1,7.8,2,7.8,3.3v0.2H5.9c-1.3,0-2.3,1-2.3,2.3v1.3c0,0.5,0.4,0.9,0.9,1v10.5c0,1.3,1,2.3,2.3,2.3h8.5c1.3,0,2.3-1,2.3-2.3V8.2c0.5-0.1,0.9-0.5,0.9-1V5.9C18.4,4.6,17.4,3.6,16.1,3.6z M9.1,3.3c0-0.6,0.5-1.1,1.1-1.1h1.7c0.6,0,1.1,0.5,1.1,1.1v0.2H9.1V3.3z M16.3,18.7c0,0.6-0.5,1.1-1.1,1.1H6.7c-0.6,0-1.1-0.5-1.1-1.1V8.2h10.6V18.7z M17.2,7H4.8V5.9c0-0.6,0.5-1.1,1.1-1.1h10.2c0.6,0,1.1,0.5,1.1,1.1V7z"/></g><g><g><path class="fill" d="M11,18c-0.4,0-0.6-0.3-0.6-0.6v-6.8c0-0.4,0.3-0.6,0.6-0.6s0.6,0.3,0.6,0.6v6.8C11.6,17.7,11.4,18,11,18z"/></g><g><path class="fill" d="M8,18c-0.4,0-0.6-0.3-0.6-0.6v-6.8c0-0.4,0.3-0.6,0.6-0.6c0.4,0,0.6,0.3,0.6,0.6v6.8C8.7,17.7,8.4,18,8,18z"/></g><g><path class="fill" d="M14,18c-0.4,0-0.6-0.3-0.6-0.6v-6.8c0-0.4,0.3-0.6,0.6-0.6c0.4,0,0.6,0.3,0.6,0.6v6.8C14.6,17.7,14.3,18,14,18z"/></g></g></g></svg>';
+var completeSVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 22 22" style="enable-background:new 0 0 22 22;" xml:space="preserve"><rect y="0" class="noFill" width="22" height="22"/><g><path class="fill" d="M9.7,14.4L9.7,14.4c-0.2,0-0.4-0.1-0.5-0.2l-2.7-2.7c-0.3-0.3-0.3-0.8,0-1.1s0.8-0.3,1.1,0l2.1,2.1l4.8-4.8c0.3-0.3,0.8-0.3,1.1,0s0.3,0.8,0,1.1l-5.3,5.3C10.1,14.3,9.9,14.4,9.7,14.4z"/></g></svg>';
+
+document.getElementById('add').addEventListener('click', function() {
+  var value = document.getElementById('item').value;
+  if (value) {
+    addItem(value);
+  }
+});
+
+document.getElementById('item').addEventListener('keydown', function (e) {
+  var value = this.value;
+  if (e.code === 'Enter' && value) {
+    addItem(value);
+  }
+});
+
+  function addItem (value) {
+   addItemToDOM(value);
+   document.getElementById('item').value = '';
+
+   data.todo.push(value);
+   dataObjectUpdated();
+}
+
+renderTodoList();
+
+function renderTodoList() {
+  if (!data.todo.length && !data.completed.length)
+
+   return;
+
+  for (var i = 0; i < data.todo.length; i++) {
+    var value = data.todo[i];
+    addItemToDOM(value);
+  }
+
+  for (var l = 0; l < data.completed.length; l++) {
+    var value = data.completed[l];
+    addItemToDOM(value, true);
+  }
+}
+
+function dataObjectUpdated() {
+  localStorage.setItem('todoList', JSON.stringify(data));
+}
+
+function removeItem() {
+  var item = this.parentNode.parentNode;
+  var parent = item.parentNode;
+  var id = parent.id;
+  var value = item.innerText;
+
+  if (id === 'todo') {
+    data.todo.splice(data.todo.indexOf(value), 1);
+  } else {
+    data.completed.splice(data.completed.indexOf(value), 1);
+  }
+  dataObjectUpdated();
+
+  parent.removeChild(item);
+}
+
+function completeItem() {
+  var item = this.parentNode.parentNode;
+  var parent = item.parentNode;
+  var id = parent.id;
+  var value = item.innerText;
+
+  if (id === 'todo') {
+    data.todo.splice(data.todo.indexOf(value), 1);
+    data.completed.push(value);
+  } else {
+    data.completed.splice(data.completed.indexOf(value), 1);
+    data.todo.push(value);
+  }
+  dataObjectUpdated();
 
 
-    //Event Listeners
-    addToDoButton.addEventListener("click", function() {
-        addItem();
-    })
+  var target = (id === 'todo') ? document.getElementById('completed'):document.getElementById('todo');
 
-    document.addEventListener("keydown", function() {
-        if (event.keyCode === 13) {
-            addItem();
-        }
-    })
+  parent.removeChild(item);
+  target.insertBefore(item, target.childNodes[0]);
+}
 
-    wipeDataBtn.addEventListener("click", function() {
-        localStorage.removeItem("storage") //previously was localStorage.clear() but changed to save theme data
-        document.querySelectorAll(".paragraph-styling").forEach(e => e.remove());
-        location.reload(); //so that addItems() don't reappear, if you add more items after clearing, and before leaving session.
-    })
 
-    document.querySelector("#themeToggler").addEventListener("click", function() {
-        if ($(event.target).hasClass("themeActionButton")) {
-            themeCode()
-        } else {
-            themeAction()
-        }
-    })
+function addItemToDOM(text, completed) {
+  var list = (completed) ? document.getElementById('completed'):document.getElementById('todo');
 
-    //Final item is rendering last used themeCode
-    if (localStorage.getItem("theme") == "dark") {
-        themeCode()
-    }
-}) //jQuery document.ready() wrapper END
+  var item = document.createElement('li');
+  item.innerText = text;
+
+  var buttons = document.createElement('div');
+  buttons.classList.add('buttons');
+
+  var remove = document.createElement('button');
+  remove.classList.add('remove');
+  remove.innerHTML = removeSVG;
+
+
+  remove.addEventListener('click', removeItem);
+
+  var complete = document.createElement('button');
+  complete.classList.add('complete');
+  complete.innerHTML = completeSVG;
+
+ 
+  complete.addEventListener('click', completeItem);
+
+  buttons.appendChild(remove);
+  buttons.appendChild(complete);
+  item.appendChild(buttons);
+
+  list.insertBefore(item, list.childNodes[0]);
+}
