@@ -1,350 +1,128 @@
 
-import React, {Component} from 'react';
-import sortBy from 'sort-by';
-import {CSSTransitionGroup} from 'react-transition-group';
-import SwipeableViews from 'react-swipeable-views';
-import AppBar from 'material-ui/AppBar';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
-import {Tabs, Tab} from 'material-ui/Tabs';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import CheckIcon from 'material-ui/svg-icons/action/check-circle';
-import ListIcon from 'material-ui/svg-icons/action/list';
-import TodoIcon from 'material-ui/svg-icons/action/today';
-import EditIcon from 'material-ui/svg-icons/action/delete';
-import CloseIcon from 'material-ui/svg-icons/content/delete-sweep';
-import ColumnList from './ColumnList';
-import ConfirmDialog from './ConfirmDialog';
-import If from './If';
-import './App.css';
-
-/**
- * @description Main App component.
- * @constructor
- * @param {Object} props - The props that were defined by the caller of this component.
- */
-class App extends Component {
-	constructor(props) {
-		super(props);
-
-		/**
-		 * @typedef {Object} ComponentState
-		 * @property {Object[]} items - All list items of the app.
-		 * @property {number} taskIdCounter - The index of the last task added.
-		 * @property {boolean} submitDisabled - Indicates whether submit is disabled.
-		 * @property {number} slideIndex - The index of the tab component.
-		 * @property {boolean} dialogOpen - Visibility of the clear tasks dialog.
-		 * @property {boolean} removeMode - Indicates if the remove mode is active.
-		 */
-
-		/** @type {ComponentState} */
-		this.state = {
-			items: [],
-			taskIdCounter: 0,
-			submitDisabled: true,
-			slideIndex: 0,
-			dialogOpen: false,
-			removeMode: false,
-		};
-	}
-
-	/**
-	 * Lifecycle event handler called just after the App loads into the DOM.
-	 * Get any saved items and taskIdCounter from the local storage and setup state with it.
-	 */
-	componentWillMount() {
-		const toDoListItems = window.localStorage.getItem('toDoListItems') || '[]';
-		const taskIdCounter = window.localStorage.getItem('taskIdCounter') || 0;
-		//Get
-		this.setState(
-			{
-				items: JSON.parse(toDoListItems),
-				taskIdCounter: taskIdCounter,
-			}
-		);
-	}
-
-	/**
-	 * @description Add task to the To Do list.
-	 */
-	addTask = () => {
-		const input = this.taskInput.input || {};
-		const { value = '' } = input;
-
-		if (value === '') return;
-
-		this.setState(previousState => {
-			const { items = [] } = previousState;
-			const { taskIdCounter = 0 } = previousState;
-			const taskId = taskIdCounter+1;
-			const newTask = {
-				id: taskId,
-				title: value,
-				status: 'To Do'
-			};
-			items.push(newTask);
-			return {
-				items: items.sort(sortBy('id')),
-				submitDisabled: true,
-				taskIdCounter: taskId,
-			}
-		}, function stateUpdateComplete() {
-			this.taskInput.input.value = '';
-			this.updateLocalStorageItems(this.state.items);
-			this.updateTaskCounter(this.state.taskIdCounter);
-		}.bind(this));
-	};
-
-	/**
-	 * @description Update task toggling between To Do/Done status.
-	 * @param {Object} task - The task to be updated
-	 */
-	handleUpdateTask = (task) => {
-		this.setState(previousState => {
-			const { items } = previousState;
-			const filteredItems = items.filter( item => item.id !== task.id);
-			task.status = (task.status === 'To Do') ? 'Done' : 'To Do';
-			filteredItems.push(task);
-			return {
-				items: filteredItems.sort(sortBy('id'))
-			}
-		}, function stateUpdateComplete() {
-			this.updateLocalStorageItems(this.state.items);
-		}.bind(this));
-	};
-
-	/**
-	 * @description Remove task.
-	 * @param {Object} task - The task to be removed.
-	 */
-	handleRemoveTask = (task) => {
-		this.setState(previousState => {
-			const { items } = previousState;
-			const filteredItems = items.filter( item => item.id !== task.id);
-			return {
-				items: filteredItems.sort(sortBy('id'))
-			}
-		}, function stateUpdateComplete() {
-			this.updateLocalStorageItems(this.state.items);
-		}.bind(this));
-	};
-
-	/**
-	 * @description Handle the Account Key TextField input change. It enable the submit button if field is not empty or
-	 * disable it otherwise.
-	 * @param {Object} event - On click event object
-	 * @param {value} value - The task description
-	 */
-	handleTextFieldChange = (event, value) => {
-		if((value.length > 0) && this.state.submitDisabled){
-			this.setState({submitDisabled: false});
-		}
-		else if((value.length === 0) && !this.state.submitDisabled){
-			this.setState({submitDisabled: true});
-		}
-	};
-
-	/**
-	 * @description Save items to local storage.
-	 * @param {Object[]} items - Array of items/tasks to be saved.
-	 */
-	updateLocalStorageItems = (items) => {
-		window.localStorage.setItem('toDoListItems', JSON.stringify(items));
-	};
-
-	/**
-	 * @description Update current taskId into local storage.
-	 * @param {number} taskCounter - Id of the task to be saved at local storage.
-	 */
-	updateTaskCounter = (taskCounter) => {
-		window.localStorage.setItem('taskIdCounter', taskCounter);
-	};
-
-	/**
-	 * @description Handle the tab change.
-	 * @param {number} value - The index of the Tab.
-	 */
-	handleChange = (value) => {
-		this.setState({
-			slideIndex: value,
-		}, function stateUpdateComplete() {
-			// Fix scroll in swipe transitions
-			window.scrollTo(0, 0);
-		});
-	};
+var data = (localStorage.getItem('todoList')) ? JSON.parse(localStorage.getItem('todoList')):{
+  todo: [],
+  completed: []
+};
 
 
-	/**
-	 * @description Enable the remove task mode.
-	 */
-	enableRemoveMode = () => {
-		if (!this.state.removeMode) {
-			this.setState({removeMode: true});
-		}
-	};
 
-	/**
-	 * @description Disable the remove task mode.
-	 */
-	disableRemoveMode = () => {
-		if (this.state.removeMode) {
-			this.setState({removeMode: false});
-		}
-	};
+var removeSVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 22 22" style="enable-background:new 0 0 22 22;" xml:space="preserve"><rect class="noFill" width="22" height="22"/><g><g><path class="fill" d="M16.1,3.6h-1.9V3.3c0-1.3-1-2.3-2.3-2.3h-1.7C8.9,1,7.8,2,7.8,3.3v0.2H5.9c-1.3,0-2.3,1-2.3,2.3v1.3c0,0.5,0.4,0.9,0.9,1v10.5c0,1.3,1,2.3,2.3,2.3h8.5c1.3,0,2.3-1,2.3-2.3V8.2c0.5-0.1,0.9-0.5,0.9-1V5.9C18.4,4.6,17.4,3.6,16.1,3.6z M9.1,3.3c0-0.6,0.5-1.1,1.1-1.1h1.7c0.6,0,1.1,0.5,1.1,1.1v0.2H9.1V3.3z M16.3,18.7c0,0.6-0.5,1.1-1.1,1.1H6.7c-0.6,0-1.1-0.5-1.1-1.1V8.2h10.6V18.7z M17.2,7H4.8V5.9c0-0.6,0.5-1.1,1.1-1.1h10.2c0.6,0,1.1,0.5,1.1,1.1V7z"/></g><g><g><path class="fill" d="M11,18c-0.4,0-0.6-0.3-0.6-0.6v-6.8c0-0.4,0.3-0.6,0.6-0.6s0.6,0.3,0.6,0.6v6.8C11.6,17.7,11.4,18,11,18z"/></g><g><path class="fill" d="M8,18c-0.4,0-0.6-0.3-0.6-0.6v-6.8c0-0.4,0.3-0.6,0.6-0.6c0.4,0,0.6,0.3,0.6,0.6v6.8C8.7,17.7,8.4,18,8,18z"/></g><g><path class="fill" d="M14,18c-0.4,0-0.6-0.3-0.6-0.6v-6.8c0-0.4,0.3-0.6,0.6-0.6c0.4,0,0.6,0.3,0.6,0.6v6.8C14.6,17.7,14.3,18,14,18z"/></g></g></g></svg>';
+var completeSVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 22 22" style="enable-background:new 0 0 22 22;" xml:space="preserve"><rect y="0" class="noFill" width="22" height="22"/><g><path class="fill" d="M9.7,14.4L9.7,14.4c-0.2,0-0.4-0.1-0.5-0.2l-2.7-2.7c-0.3-0.3-0.3-0.8,0-1.1s0.8-0.3,1.1,0l2.1,2.1l4.8-4.8c0.3-0.3,0.8-0.3,1.1,0s0.3,0.8,0,1.1l-5.3,5.3C10.1,14.3,9.9,14.4,9.7,14.4z"/></g></svg>';
 
-	/**
-	 * @description Remove all tasks from the App.
-	 */
-	clearTasks = () => {
-		this.handleDialogClose();
-		this.setState({removeMode: false, items: []}, function stateUpdateComplete() {
-			// Update local storage
-			this.updateLocalStorageItems(this.state.items);
-		});
-	};
+document.getElementById('add').addEventListener('click', function() {
+  var value = document.getElementById('item').value;
+  if (value) {
+    addItem(value);
+  }
+});
 
-	/**
-	 * @description Open the clear tasks dialog.
-	 */
-	handleDialogOpen = () => {
-		this.setState({dialogOpen: true});
-	};
+document.getElementById('item').addEventListener('keydown', function (e) {
+  var value = this.value;
+  if (e.code === 'Enter' && value) {
+    addItem(value);
+  }
+});
 
-	/**
-	 * @description Close the clear task dialog.
-	 */
-	handleDialogClose = () => {
-		this.setState({dialogOpen: false});
-	};
+  function addItem (value) {
+   addItemToDOM(value);
+   document.getElementById('item').value = '';
 
-	/**
-	 * @description Handle the enter key pressed under the add task input.
-	 * @param {Object} e - Key press event
-	 */
-	keyPress = (e) => {
-		// If Enter key
-		if(e.keyCode === 13){
-			// Call method to add the task if not empty
-			this.addTask();
-			// put the login here
-		}
-	};
-
-	render() {
-		const { items = [] }  = this.state;
-		const columns = [
-			{ title: 'To Do', items: items.filter( item => item.status === 'To Do'), icon: <TodoIcon />},
-			{ title: 'Done', items: items.filter( item => item.status === 'Done'), icon: <CheckIcon />},
-			{ title: 'All', items, icon: <ListIcon />},
-		];
-		return (
-			<MuiThemeProvider>
-				<div className="App">
-					{/* Clear Tasks Confirmation Dialog */}
-					<ConfirmDialog
-						title="Clear All Tasks"
-						message={'Are you sure you want to remove all tasks from the App?'}
-						onCancel={this.handleDialogClose}
-						onConfirm={this.clearTasks}
-						open={this.state.dialogOpen}
-					/>
-					<AppBar
-						title={<span style={{color: 'white'}}>To-Do List</span>}
-						showMenuIconButton={false}
-						style={{backgroundColor: 'rgb(0, 151, 167)', position: 'fixed', zIndex: 9999,}}
-					/>
-					<div className="App-container">
-						<div style={{position: 'fixed', width: '100%', paddingTop: 64, zIndex: 8888, backgroundColor: 'white'}}>
-							<TextField
-								hintText="Type task"
-								floatingLabelText="Add Task"
-								ref={(taskInput) => {
-									this.taskInput = taskInput;
-								}}
-								disabled={this.state.removeMode}
-								style={{margin: 10, width: '60%', maxWidth: 300}}
-								onChange={this.handleTextFieldChange}
-								onKeyDown={this.keyPress}
-							/>
-							<RaisedButton
-								style={{margin: 10, width: '30%', maxWidth: 56}}
-								label="Create"
-								onClick={this.addTask}
-								disabled={this.state.submitDisabled} />
-							<Tabs
-								onChange={this.handleChange}
-								value={this.state.slideIndex}
-							>
-								{columns.map((column,index) => (
-									<Tab
-										key={index}
-										value={index}
-										icon={column.icon}
-										label={
-											<div>
-												{column.title} ({(column.title !== 'All') ? column.items.filter(item => item.status === column.title).length: items.length})
-											</div>
-										}
-									/>
-								))}
-							</Tabs>
-						</div>
-						<div className="app-separator">-</div>
-						<CSSTransitionGroup
-							transitionName="remove-mode-animation"
-							transitionEnterTimeout={300}
-							transitionLeaveTimeout={300}>
-							{this.state.removeMode &&
-								<div className="remove-mode">
-									<RaisedButton
-									label="Delete All Tasks"
-									secondary={true}
-									onClick={this.handleDialogOpen}
-									/>
-								</div>
-							}
-							<div className="app-lists">
-								<SwipeableViews
-									index={this.state.slideIndex}
-									onChangeIndex={this.handleChange}
-									style={{width: '100%'}}
-								>
-									{columns.map((column,index) => (
-										<div
-											className="swipeable-views"
-											key={index}>
-											<ColumnList
-												title={column.title}
-												items={column.items}
-												updateTask={this.handleUpdateTask}
-												removeTask={this.handleRemoveTask}
-												removeMode={this.state.removeMode}
-											/>
-										</div>
-									))}
-								</SwipeableViews>
-							</div>
-						</CSSTransitionGroup>
-					</div>
-					<div className="enable-remove-mode">
-						<If test={!this.state.removeMode}>
-							<FloatingActionButton onClick={this.enableRemoveMode}>
-								<EditIcon />
-							</FloatingActionButton>
-						</If>
-						<If test={this.state.removeMode}>
-							<FloatingActionButton secondary={true} onClick={this.disableRemoveMode}>
-								<CloseIcon />
-							</FloatingActionButton>
-						</If>
-					</div>
-				</div>
-			</MuiThemeProvider>
-		);
-	}
+   data.todo.push(value);
+   dataObjectUpdated();
 }
 
-export default App;
-Footer
+renderTodoList();
+
+function renderTodoList() {
+  if (!data.todo.length && !data.completed.length)
+
+   return;
+
+  for (var i = 0; i < data.todo.length; i++) {
+    var value = data.todo[i];
+    addItemToDOM(value);
+  }
+
+  for (var l = 0; l < data.completed.length; l++) {
+    var value = data.completed[l];
+    addItemToDOM(value, true);
+  }
+}
+
+function dataObjectUpdated() {
+  localStorage.setItem('todoList', JSON.stringify(data));
+}
+
+function removeItem() {
+  var item = this.parentNode.parentNode;
+  var parent = item.parentNode;
+  var id = parent.id;
+  var value = item.innerText;
+
+  if (id === 'todo') {
+    data.todo.splice(data.todo.indexOf(value), 1);
+  } else {
+    data.completed.splice(data.completed.indexOf(value), 1);
+  }
+  dataObjectUpdated();
+
+  parent.removeChild(item);
+}
+
+function completeItem() {
+  var item = this.parentNode.parentNode;
+  var parent = item.parentNode;
+  var id = parent.id;
+  var value = item.innerText;
+
+  if (id === 'todo') {
+    data.todo.splice(data.todo.indexOf(value), 1);
+    data.completed.push(value);
+  } else {
+    data.completed.splice(data.completed.indexOf(value), 1);
+    data.todo.push(value);
+  }
+  dataObjectUpdated();
+
+
+  var target = (id === 'todo') ? document.getElementById('completed'):document.getElementById('todo');
+
+  parent.removeChild(item);
+  target.insertBefore(item, target.childNodes[0]);
+}
+
+
+function addItemToDOM(text, completed) {
+  var list = (completed) ? document.getElementById('completed'):document.getElementById('todo');
+
+  var item = document.createElement('li');
+  item.innerText = text;
+
+  var buttons = document.createElement('div');
+  buttons.classList.add('buttons');
+
+  var remove = document.createElement('button');
+  remove.classList.add('remove');
+  remove.innerHTML = removeSVG;
+
+
+  remove.addEventListener('click', removeItem);
+
+  var complete = document.createElement('button');
+  complete.classList.add('complete');
+  complete.innerHTML = completeSVG;
+
+ 
+  complete.addEventListener('click', completeItem);
+
+  buttons.appendChild(remove);
+  buttons.appendChild(complete);
+  item.appendChild(buttons);
+
+  list.insertBefore(item, list.childNodes[0]);
+}
+
+
+
+
 
